@@ -19,7 +19,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Nullable
-    private Long id;
+    private long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -44,4 +44,11 @@ public class User {
         this.email = email;
     }
 
+    public Object getEmail() {
+        return email;
+    }
+
+    public Long getId() {
+        return id;
+    }
 }
