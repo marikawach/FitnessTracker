@@ -9,6 +9,7 @@ import pl.wsb.fitnesstracker.user.api.UserService;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,31 @@ class UserServiceImpl implements UserService, UserProvider {
             throw new IllegalArgumentException("User has already DB ID, update is not permitted!");
         }
         return userRepository.save(user);
+    }
+
+    @Override
+    public User updateUser(final Long userId, final User user) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setBirthdate(user.getBirthdate());
+        existingUser.setEmail(user.getEmail());
+
+        return userRepository.save(existingUser);
+    }
+
+    @Override
+    public void deleteUser(final Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    @Override
+    public List<User> findUsersOlderThan(final LocalDate date) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getBirthdate().isBefore(date))
+                .toList();
     }
 
     @Override
